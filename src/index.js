@@ -498,7 +498,7 @@ class Ennemy extends Character {
     this.y = gameArea.clientHeight * Math.random();
     this.direction = { x: 1, y: 1 };
     this.setPosition();
-    this.canDealDamage = true;
+    this.canDealDamage = false;
     this.canReceiveDamage = true;
   }
 
@@ -518,7 +518,7 @@ class Ennemy extends Character {
       let x = parseInt(currentPositionX);
       x -= 256;
       sprite.style.backgroundPositionX = x + "px";
-    }, 125);
+    }, 85);
   }
 
   animateMoving(direction) {
