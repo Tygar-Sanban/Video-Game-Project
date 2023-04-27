@@ -83,7 +83,7 @@ main {
   position: fixed;
   left: 25px;
   top: 25px;
-  width: 512px;
+  width: 700px;
   height: 128px;
   display: flex;
   justify-content: space-around;
@@ -311,6 +311,15 @@ main {
   left: calc(0px + var(--x-position));
 }
 
+.spawn1 {
+  width: 960;
+  height: 160px;
+  position: absolute;
+  z-index: 100;
+  top: calc(640 + var(--y-position));
+  left: calc(0px + var(--x-position));
+}
+
 .main-character.down-idle {
   background-image: url("../Images/main-char/main-char01/_down\ idle.png");
   background-position: 0px 0px;
@@ -466,6 +475,42 @@ main {
   background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/stomp/spritesheet-9.png");
 }
 
+.cultist {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1020px + var(--y-position));
+  left: calc(1440px + var(--x-position));
+}
+
+.cultist.idle {
+  background-image: url("../Images/bad-guys/Cultist/idle.png");
+}
+
+.cultist.right-side-walk {
+  background-image: url("../Images/bad-guys/Cultist/walk-right.png");
+}
+
+.cultist.left-side-walk {
+  background-image: url("../Images/bad-guys/Cultist/walk-right.png");
+  transform: scaleX(-1);
+}
+
+.cultist.attack-left {
+  background-image: url("../Images/bad-guys/Cultist/attack-right.png");
+  transform: scaleX(-1);
+}
+
+.cultist.attack-right {
+  background-image: url("../Images/bad-guys/Cultist/attack-right.png");
+  transform: scaleX(1);
+}
+
+.cultist.dying {
+  background-image: url("../Images/bad-guys/Cultist/dying.png");
+}
+
 .blue {
   width: 64px;
   height: 64px;
@@ -474,6 +519,15 @@ main {
   top: calc(350px + var(--y-position));
   left: calc(300px + var(--x-position));
   background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-blue.png");
+}
+
+.blue-zone {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 100;
+  top: calc(350px + var(--y-position));
+  left: calc(300px + var(--x-position));
 }
 .red {
   width: 64px;
@@ -484,6 +538,16 @@ main {
   left: calc(300px + var(--x-position));
   background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-red.png");
 }
+
+.red-zone {
+  width: 128px;
+  height: 128px;
+  position: absolute;
+  z-index: 100;
+  top: calc(2430px + var(--y-position));
+  left: calc(300px + var(--x-position));
+}
+
 .purple {
   width: 64px;
   height: 64px;
@@ -492,6 +556,15 @@ main {
   top: calc(1120px + var(--y-position));
   left: calc(1760px + var(--x-position));
   background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-magenta.png");
+}
+
+.purple-zone {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1120px + var(--y-position));
+  left: calc(1760px + var(--x-position));
 }
 
 .bottom-map {

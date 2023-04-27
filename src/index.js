@@ -2,7 +2,7 @@
 const gameArea = document.querySelector("main");
 const gameAreaBounding = gameArea.getBoundingClientRect();
 const startGameButton = document.getElementById("start-game");
-const speed = 5.3;
+const speed = 1.3;
 const pressedKeys = {
   left: false,
   right: false,
@@ -117,17 +117,33 @@ const bottomMap = document.createElement("div");
 bottomMap.classList = "building bottom-map";
 gameArea.append(bottomMap);
 
-// let redNpc = document.createElement("div");
-// redNpc.classList = "npc red";
-// gameArea.append(redNpc);
+const spawnZone1 = document.createElement("div");
+spawnZone1.classList = "spawn1";
+gameArea.append(spawnZone1);
 
-// let blueNpc = document.createElement("div");
-// blueNpc.classList = "npc blue";
-// gameArea.append(blueNpc);
+const spawnZone2 = document.createElement("div");
+spawnZone2.classList = "spawn2";
+gameArea.append(spawnZone2);
 
-// let purpleNpc = document.createElement("div");
-// purpleNpc.classList = "npc purple";
-// gameArea.append(purpleNpc);
+const spawnZone3 = document.createElement("div");
+spawnZone3.classList = "spawn3";
+gameArea.append(spawnZone3);
+
+const spawnZone4 = document.createElement("div");
+spawnZone4.classList = "spawn4";
+gameArea.append(spawnZone4);
+
+const blueZone = document.createElement("div");
+blueZone.classList = "blue-zone";
+gameArea.append(blueZone);
+
+const redZone = document.createElement("div");
+redZone.classList = "red-zone";
+gameArea.append(redZone);
+
+const purpleZone = document.createElement("div");
+purpleZone.classList = "purple-zone";
+gameArea.append(purpleZone);
 
 function startGame() {
   new Game();
@@ -136,22 +152,6 @@ function startGame() {
 
 function handlePressedKeys(event) {
   switch (event.code) {
-    case "ArrowLeft":
-      pressedKeys.left = true;
-      lastPressedKey = "left";
-      break;
-    case "ArrowRight":
-      pressedKeys.right = true;
-      lastPressedKey = "right";
-      break;
-    case "ArrowUp":
-      pressedKeys.up = true;
-      lastPressedKey = "up";
-      break;
-    case "ArrowDown":
-      pressedKeys.down = true;
-      lastPressedKey = "down";
-      break;
     case "KeyA":
       pressedKeys.left = true;
       lastPressedKey = "left";
@@ -188,22 +188,6 @@ function handlePressedKeys(event) {
 
 function handleReleasedKeys(event) {
   switch (event.code) {
-    case "ArrowLeft":
-      pressedKeys.left = false;
-      lastPressedKey = "left";
-      break;
-    case "ArrowRight":
-      pressedKeys.right = false;
-      lastPressedKey = "right";
-      break;
-    case "ArrowUp":
-      pressedKeys.up = false;
-      lastPressedKey = "up";
-      break;
-    case "ArrowDown":
-      pressedKeys.down = false;
-      lastPressedKey = "down";
-      break;
     case "KeyA":
       pressedKeys.left = false;
       lastPressedKey = "left";
@@ -858,8 +842,8 @@ class Mob extends Character {
       this.direction.y = -1;
       this.animateMoving("up");
     }
-    this.x += 1 * this.direction.x * speed;
-    this.y += 1 * this.direction.y * speed;
+    this.x += 1 * this.direction.x * speed - 0.2;
+    this.y += 1 * this.direction.y * speed - 0.2;
     this.setPosition();
   }
 
@@ -903,12 +887,58 @@ class Mob extends Character {
   }
 }
 
+class Cultist extends Mob {
+  createCharacter() {
+    const div = document.createElement("div");
+    div.classList = "character cultist idle";
+    gameArea.append(div);
+    return div;
+  }
+
+  animateMoving(direction) {
+    switch (direction) {
+      case "right":
+        this.element.classList = "character cultist right-side-walk";
+        break;
+      case "left":
+        this.element.classList = "character cultist left-side-walk";
+        break;
+    }
+  }
+
+  animateEnnemyAttack() {
+    if (this.element.classList.contains("left-side-walk")) {
+      this.element.classList = "cultist attack-left";
+    }
+    if (this.element.classList.contains("right-side-walk")) {
+      this.element.classList = "cultist attack-right";
+    }
+  }
+
+  killCharacter() {
+    this.element.classList = "cultist dying";
+    setTimeout(() => {
+      this.element.remove();
+    }, 900);
+  }
+  animateImage() {
+    setInterval(() => {
+      let sprite = this.element;
+      let currentPositionX = window.getComputedStyle(
+        this.element
+      ).backgroundPositionX;
+      let x = parseInt(currentPositionX);
+      x -= 220;
+      sprite.style.backgroundPositionX = x + "px";
+    }, 85);
+  }
+}
+
 //Now, we'll put in some NPCs that'll be responsible for the powers of my character
 class Npc {
   constructor(color) {
     this.color = color;
     this.element = this.createElement();
-    // this.handleColor();
   }
 
   createElement() {
@@ -917,18 +947,6 @@ class Npc {
     gameArea.append(npc);
     return npc;
   }
-
-  // handleColor() {
-  //   if (this.color === "red") {
-  //     this.element.classList = "red";
-  //   }
-  //   if (this.element.color === "blue") {
-  //     this.element.classList = "blue";
-  //   }
-  //   if (this.element.color === "purple") {
-  //     this.element.classList = "purple";
-  //   }
-  // }
 
   animateImage() {
     setInterval(() => {
@@ -946,7 +964,7 @@ class Npc {
 //Let's launch the game !!
 class Game {
   constructor() {
-    this.mainCharacter = new MainCharacter("Philippe", 11, 3);
+    this.mainCharacter = new MainCharacter("Philippe", 15, 3);
     this.intervalId = null;
     this.ennemies = [
       // new Ennemy(150, 2),
@@ -974,6 +992,7 @@ class Game {
       // new Mob(5, 1),
       // new Mob(5, 1),
     ];
+    this.cultist = new Cultist(50, 3);
     this.npcs = [new Npc("blue"), new Npc("red"), new Npc("purple")];
     this.animate();
     this.mainCharacter.animateImage();
@@ -986,6 +1005,7 @@ class Game {
     for (const npc of this.npcs) {
       npc.animateImage();
     }
+    this.cultist.animateImage();
 
     // setInterval(() => {
     //   this.pause();
@@ -1027,6 +1047,10 @@ class Game {
             mob.canDealDamage = true;
           }, 1000);
         }
+        this.cultist.canDealDamage = false;
+        setTimeout(() => {
+          this.cultist.canDealDamage = true;
+        }, 1000);
         break;
       case "right":
         if (pressedKeys.n) {
@@ -1047,6 +1071,10 @@ class Game {
             mob.canDealDamage = true;
           }, 1000);
         }
+        this.cultist.canDealDamage = false;
+        setTimeout(() => {
+          this.cultist.canDealDamage = true;
+        }, 1000);
         break;
       case "up":
         if (pressedKeys.n) {
@@ -1067,6 +1095,10 @@ class Game {
             mob.canDealDamage = true;
           }, 1000);
         }
+        this.cultist.canDealDamage = false;
+        setTimeout(() => {
+          this.cultist.canDealDamage = true;
+        }, 1000);
         break;
       case "down":
         if (pressedKeys.n) {
@@ -1087,6 +1119,10 @@ class Game {
             mob.canDealDamage = true;
           }, 1000);
         }
+        this.cultist.canDealDamage = false;
+        setTimeout(() => {
+          this.cultist.canDealDamage = true;
+        }, 1000);
         break;
     }
   }
@@ -1187,7 +1223,7 @@ class Game {
       }
 
       for (const ennemy of this.ennemies) {
-        if (ennemy.canDealDamage && this.moveBackground) {
+        if (ennemy.canDealDamage && this.isOnAttackDistance(ennemy)) {
           ennemy.move();
         }
 
@@ -1210,7 +1246,7 @@ class Game {
       }
 
       for (const ennemy of this.mobs) {
-        if (ennemy.canDealDamage) {
+        if (ennemy.canDealDamage && this.isOnAttackDistance(ennemy)) {
           ennemy.move();
         }
 
@@ -1231,13 +1267,56 @@ class Game {
           this.onAttackIceCollision(ennemy);
         }
       }
-      // if (this.buildingCollisionsDetection()) {
-      //   this.onBuildingCollision();
-      // }
+
+      if (this.cultist.canDealDamage && this.isOnAttackDistance(this.cultist)) {
+        this.cultist.move();
+      }
+      if (this.cultistCollisionDetection(this.cultist)) {
+        if (this.cultist.canDealDamage) {
+          this.onCollision(this.cultist);
+        } else {
+          return;
+        }
+      }
+      if (this.attackFireMobCollisionDetection(this.cultist)) {
+        this.onAttackFireCollision(this.cultist);
+      }
+      if (this.attackLightningMobCollisionDetection(this.cultist)) {
+        this.onAttackLightningCollision(this.cultist);
+      }
+      if (this.attackIceMobCollisionDetection(this.cultist)) {
+        this.onAttackIceCollision(this.cultist);
+      }
+      if (this.collisionDetectionRedZone()) {
+        console.log("colliding yo !");
+      }
+      if (this.collisionDetectionBlueZone()) {
+        console.log("colliding uesh !");
+      }
+      if (this.collisionDetectionPurpleZone()) {
+        console.log("colliding bi-atch!");
+      }
     }, 1000 / 60);
   }
 
   //The functions for when the ennemies attack !!
+  isOnAttackDistance(ennemy) {
+    if (ennemy.canDealDamage) {
+      const ennemyBounding = ennemy.element.getBoundingClientRect();
+      const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+      const isInX =
+        ennemyBounding.left < mainBounding.right + 235 &&
+        ennemyBounding.right > mainBounding.left - 235;
+      const isInY =
+        ennemyBounding.bottom > mainBounding.top - 235 &&
+        ennemyBounding.top < mainBounding.bottom + 235;
+      if (isInX && isInY) {
+        return true;
+      }
+    } else {
+      return;
+    }
+  }
 
   collisionDetection(ennemy) {
     if (ennemy.canDealDamage) {
@@ -1267,6 +1346,24 @@ class Game {
       const isInY =
         ennemyBounding.bottom > mainBounding.top + 30 &&
         ennemyBounding.top < mainBounding.bottom - 30;
+      if (isInX && isInY) {
+        return true;
+      }
+    } else {
+      return;
+    }
+  }
+
+  cultistCollisionDetection(ennemy) {
+    if (ennemy.canDealDamage) {
+      const ennemyBounding = ennemy.element.getBoundingClientRect();
+      const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+      const isInX =
+        ennemyBounding.left < mainBounding.right - 55 &&
+        ennemyBounding.right > mainBounding.left + 55;
+      const isInY =
+        ennemyBounding.bottom > mainBounding.top + 55 &&
+        ennemyBounding.top < mainBounding.bottom - 55;
       if (isInX && isInY) {
         return true;
       }
@@ -1432,6 +1529,53 @@ class Game {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
       }, 1500);
+    }
+  }
+
+  //The functions for the storyline
+
+  collisionDetectionRedZone() {
+    const red = document.querySelector(".red-zone");
+    const redBounding = red.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      redBounding.left < mainBounding.right &&
+      redBounding.right > mainBounding.left;
+    const isInY =
+      redBounding.bottom > mainBounding.top &&
+      redBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionBlueZone() {
+    const blue = document.querySelector(".blue-zone");
+    const blueBounding = blue.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      blueBounding.left < mainBounding.right &&
+      blueBounding.right > mainBounding.left;
+    const isInY =
+      blueBounding.bottom > mainBounding.top &&
+      blueBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionPurpleZone() {
+    const purple = document.querySelector(".purple-zone");
+    const purpleBounding = purple.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      purpleBounding.left < mainBounding.right &&
+      purpleBounding.right > mainBounding.left;
+    const isInY =
+      purpleBounding.bottom > mainBounding.top &&
+      purpleBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
     }
   }
 
