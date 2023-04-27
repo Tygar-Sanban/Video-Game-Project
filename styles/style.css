@@ -11,10 +11,11 @@
 
 body {
   height: 100%;
+  background-image: url("../Images/Tiles/New-map-try-map.png");
 }
 
 main {
-  background-image: url("../Images/Tiles/New-map-try-map.png");
+  background-image: url("../Images/Tiles/New-map-try-map-zoom.png");
   background-position: center;
   background-repeat: no-repeat;
   background-position-x: 0px;
@@ -22,7 +23,7 @@ main {
   width: 1920px;
   height: 975px;
   overflow: auto;
-  background-color: darkgreen;
+  background-color: black;
   margin: auto;
   position: relative;
   display: flex;
@@ -114,6 +115,12 @@ main {
   width: 256px;
   height: 256px;
   position: absolute;
+}
+
+.mob {
+  position: absolute;
+  width: 64px;
+  height: 64px;
 }
 
 .main-character.down-idle {
@@ -229,6 +236,46 @@ main {
 
 .ennemy.dying {
   background-image: url("../Images/bad-guys/E_Bros_Assets_TopDownEnemy/Enemy-Melee-Death.png");
+}
+
+.mob.down-idle {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/idle/spritesheet-5.png");
+}
+
+.mob.down-walk {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/walk/spritesheet.png");
+}
+
+.mob.right-side-walk {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/walk/spritesheet-4.png");
+}
+
+.mob.left-side-walk {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/walk/spritesheet-3.png");
+}
+
+.mob.up-walk {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/walk/spritesheet-2.png");
+}
+
+.mob.attack-down {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/swipe/spritesheet-13.png");
+}
+
+.mob.attack-up {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/swipe/spritesheet-14.png");
+}
+
+.mob.attack-left {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/swipe/spritesheet-15.png");
+}
+
+.mob.attack-right {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/swipe/spritesheet-16.png");
+}
+
+.mob.dying {
+  background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/stomp/spritesheet-9.png");
 }
 
 #end-game {

@@ -1,5 +1,4 @@
 //Let's create the rules of this universe
-
 const gameArea = document.querySelector("main");
 const gameAreaBounding = gameArea.getBoundingClientRect();
 const startGameButton = document.getElementById("start-game");
@@ -489,7 +488,6 @@ class MainCharacter extends Character {
 }
 
 // Let's create the ennemies class !
-
 class Ennemy extends Character {
   constructor(health, strength) {
     super(health, strength);
@@ -498,7 +496,7 @@ class Ennemy extends Character {
     this.y = gameArea.clientHeight * Math.random();
     this.direction = { x: 1, y: 1 };
     this.setPosition();
-    this.canDealDamage = false;
+    this.canDealDamage = true;
     this.canReceiveDamage = true;
   }
 
@@ -618,14 +616,176 @@ class Ennemy extends Character {
   }
 }
 
-//Let's launch the game !!
+class Mob extends Character {
+  constructor(health, strength) {
+    super(health, strength);
+    this.element = this.createCharacter();
+    this.x = gameArea.clientWidth * Math.random();
+    this.y = gameArea.clientHeight * Math.random();
+    this.direction = { x: 1, y: 1 };
+    this.setPosition();
+    this.canDealDamage = true;
+    this.canReceiveDamage = true;
+  }
 
+  createCharacter() {
+    const div = document.createElement("div");
+    div.classList = "character mob down-idle";
+    gameArea.append(div);
+    return div;
+  }
+
+  animateImage() {
+    setInterval(() => {
+      let sprite = this.element;
+      let currentPositionX = window.getComputedStyle(
+        this.element
+      ).backgroundPositionX;
+      let x = parseInt(currentPositionX);
+      x -= 64;
+      sprite.style.backgroundPositionX = x + "px";
+    }, 85);
+  }
+
+  move() {
+    const mainCharacter = document.querySelector(".main-character");
+    if (
+      mainCharacter.getBoundingClientRect().top - 5 <
+        this.element.getBoundingClientRect().top <
+        mainCharacter.getBoundingClientRect().top + 5 ||
+      mainCharacter.getBoundingClientRect().bottom - 5 <
+        this.element.getBoundingClientRect().bottom <
+        mainCharacter.getBoundingClientRect().bottom + 5
+    ) {
+      this.direction.y = 0;
+    }
+
+    if (
+      mainCharacter.getBoundingClientRect().left - 5 <
+        this.element.getBoundingClientRect().left <
+        mainCharacter.getBoundingClientRect().left + 5 ||
+      mainCharacter.getBoundingClientRect().right - 5 <
+        this.element.getBoundingClientRect().right <
+        mainCharacter.getBoundingClientRect().right + 5
+    ) {
+      this.direction.x = 0;
+    }
+
+    if (
+      this.element.getBoundingClientRect().right >
+      mainCharacter.getBoundingClientRect().right + 5
+    ) {
+      this.direction.x = -1;
+      this.animateMoving("left");
+    }
+    if (
+      this.element.getBoundingClientRect().left <
+      mainCharacter.getBoundingClientRect().left - 5
+    ) {
+      this.direction.x = 1;
+      this.animateMoving("right");
+    }
+    if (
+      this.element.getBoundingClientRect().top <
+      mainCharacter.getBoundingClientRect().top - 5
+    ) {
+      this.direction.y = 1;
+      this.animateMoving("down");
+    }
+    if (
+      this.element.getBoundingClientRect().bottom >
+      mainCharacter.getBoundingClientRect().bottom + 5
+    ) {
+      this.direction.y = -1;
+      this.animateMoving("up");
+    }
+    this.x += 1 * this.direction.x * speed;
+    this.y += 1 * this.direction.y * speed;
+    this.setPosition();
+  }
+
+  animateMoving(direction) {
+    switch (direction) {
+      case "right":
+        this.element.classList = "character mob right-side-walk";
+        break;
+      case "left":
+        this.element.classList = "character mob left-side-walk";
+        break;
+      case "up":
+        this.element.classList = "character mob up-walk";
+        break;
+      case "down":
+        this.element.classList = "character mob down-walk";
+        break;
+    }
+  }
+
+  animateEnnemyAttack() {
+    if (this.element.classList.contains("up-walk")) {
+      this.element.classList = "mob attack-up";
+    }
+    if (this.element.classList.contains("down-walk")) {
+      this.element.classList = "mob attack-down";
+    }
+    if (this.element.classList.contains("left-side-walk")) {
+      this.element.classList = "mob attack-left";
+    }
+    if (this.element.classList.contains("right-side-walk")) {
+      this.element.classList = "mob attack-right";
+    }
+  }
+
+  killCharacter() {
+    this.element.classList = "mob dying";
+    setTimeout(() => {
+      this.element.remove();
+    }, 900);
+  }
+}
+
+//Let's create the buildings collision
+class Buildings {
+  constructor(width, height, left, top, character) {
+    this.element = this.createElement();
+    this.element.style.width = width;
+    this.element.style.height = height;
+    this.element.style.left = left;
+    this.element.style.top = top;
+    this.character = character;
+  }
+
+  createElement() {
+    let div = document.createElement("div");
+    div.classList = "buildings";
+    gameArea.append(div);
+    return div;
+  }
+
+  collisionDetection() {
+    const buildingBounding = this.element.getBoundingClientRect();
+    const characterBounding = this.character.getBoundingClientRect();
+    const isInX =
+      buildingBounding.left < characterBounding.right - 80 &&
+      buildingBounding.right > characterBounding.left + 80;
+    const isInY =
+      buildingBounding.bottom > characterBounding.top + 60 &&
+      buildingBounding.top < characterBounding.bottom - 60;
+    if (isInX && isInY) {
+      return true;
+    } else {
+      return;
+    }
+  }
+}
+
+//Let's launch the game !!
 class Game {
   constructor() {
-    this.mainCharacter = new MainCharacter("Philippe", 5, 2);
+    this.mainCharacter = new MainCharacter("Philippe", 11, 3);
     this.intervalId = null;
     this.ennemies = [
-      new Ennemy(1000, 2),
+      // new Ennemy(150, 2),
       // new Ennemy(1, 1),
       // new Ennemy(1, 1),
       // new Ennemy(1, 1),
@@ -637,10 +797,40 @@ class Game {
       // new Ennemy(1, 1),
       // new Ennemy(1, 1),
     ];
+    this.mobs = [
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+      new Mob(5, 1),
+    ];
+    // this.buildings = [
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    //   new Buildings(),
+    // ];
     this.animate();
     this.mainCharacter.animateImage();
     for (const ennemy of this.ennemies) {
       ennemy.animateImage();
+    }
+    for (const mob of this.mobs) {
+      mob.animateImage();
     }
     // setInterval(() => {
     //   this.pause();
@@ -670,6 +860,12 @@ class Game {
             ennemy.canDealDamage = true;
           }, 1000);
         }
+        for (const mob of this.mobs) {
+          mob.canDealDamage = false;
+          setTimeout(() => {
+            mob.canDealDamage = true;
+          }, 1000);
+        }
         break;
       case "right":
         if (pressedKeys.n) {
@@ -682,6 +878,12 @@ class Game {
           ennemy.canDealDamage = false;
           setTimeout(() => {
             ennemy.canDealDamage = true;
+          }, 1000);
+        }
+        for (const mob of this.mobs) {
+          mob.canDealDamage = false;
+          setTimeout(() => {
+            mob.canDealDamage = true;
           }, 1000);
         }
         break;
@@ -698,6 +900,12 @@ class Game {
             ennemy.canDealDamage = true;
           }, 1000);
         }
+        for (const mob of this.mobs) {
+          mob.canDealDamage = false;
+          setTimeout(() => {
+            mob.canDealDamage = true;
+          }, 1000);
+        }
         break;
       case "down":
         if (pressedKeys.n) {
@@ -710,6 +918,12 @@ class Game {
           ennemy.canDealDamage = false;
           setTimeout(() => {
             ennemy.canDealDamage = true;
+          }, 1000);
+        }
+        for (const mob of this.mobs) {
+          mob.canDealDamage = false;
+          setTimeout(() => {
+            mob.canDealDamage = true;
           }, 1000);
         }
         break;
@@ -800,6 +1014,29 @@ class Game {
           this.onAttackIceCollision(ennemy);
         }
       }
+
+      for (const ennemy of this.mobs) {
+        if (ennemy.canDealDamage) {
+          ennemy.move();
+        }
+
+        if (this.mobCollisionDetection(ennemy)) {
+          if (ennemy.canDealDamage) {
+            this.onCollision(ennemy);
+          } else {
+            return;
+          }
+        }
+        if (this.attackFireMobCollisionDetection(ennemy)) {
+          this.onAttackFireCollision(ennemy);
+        }
+        if (this.attackLightningMobCollisionDetection(ennemy)) {
+          this.onAttackLightningCollision(ennemy);
+        }
+        if (this.attackIceMobCollisionDetection(ennemy)) {
+          this.onAttackIceCollision(ennemy);
+        }
+      }
     }, 1000 / 60);
   }
 
@@ -815,6 +1052,24 @@ class Game {
       const isInY =
         ennemyBounding.bottom > mainBounding.top + 60 &&
         ennemyBounding.top < mainBounding.bottom - 60;
+      if (isInX && isInY) {
+        return true;
+      }
+    } else {
+      return;
+    }
+  }
+
+  mobCollisionDetection(ennemy) {
+    if (ennemy.canDealDamage) {
+      const ennemyBounding = ennemy.element.getBoundingClientRect();
+      const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+      const isInX =
+        ennemyBounding.left < mainBounding.right - 30 &&
+        ennemyBounding.right > mainBounding.left + 30;
+      const isInY =
+        ennemyBounding.bottom > mainBounding.top + 30 &&
+        ennemyBounding.top < mainBounding.bottom - 30;
       if (isInX && isInY) {
         return true;
       }
@@ -856,12 +1111,29 @@ class Game {
     }
   }
 
+  attackFireMobCollisionDetection(ennemy) {
+    const ennemyBounding = ennemy.element.getBoundingClientRect();
+    const attack = document.querySelector(".attack");
+    if (!attack) {
+      return;
+    }
+    const attackBounding = attack.getBoundingClientRect();
+    const isInX =
+      ennemyBounding.left < attackBounding.right &&
+      ennemyBounding.right > attackBounding.left;
+    const isInY =
+      ennemyBounding.bottom > attackBounding.top &&
+      ennemyBounding.top < attackBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
   onAttackFireCollision(ennemy) {
     if (ennemy.canReceiveDamage) {
       ennemy.canReceiveDamage = false;
       ennemy.canDealDamage = false;
-      ennemy.receiveDamage(this.mainCharacter.strength + 2);
-      console.log(ennemy.health);
+      ennemy.receiveDamage(this.mainCharacter.strength * 3);
       setTimeout(() => {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
@@ -887,12 +1159,29 @@ class Game {
     }
   }
 
+  attackLightningMobCollisionDetection(ennemy) {
+    const ennemyBounding = ennemy.element.getBoundingClientRect();
+    const attack = document.querySelector(".attack-lightning");
+    if (!attack) {
+      return;
+    }
+    const attackBounding = attack.getBoundingClientRect();
+    const isInX =
+      ennemyBounding.left < attackBounding.right &&
+      ennemyBounding.right > attackBounding.left;
+    const isInY =
+      ennemyBounding.bottom > attackBounding.top &&
+      ennemyBounding.top < attackBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
   onAttackLightningCollision(ennemy) {
     if (ennemy.canReceiveDamage) {
       ennemy.canReceiveDamage = false;
       ennemy.canDealDamage = false;
-      ennemy.receiveDamage(this.mainCharacter.strength + 15);
-      console.log(ennemy.health);
+      ennemy.receiveDamage(this.mainCharacter.strength * 20);
       setTimeout(() => {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
@@ -918,6 +1207,25 @@ class Game {
     }
   }
 
+  attackIceMobCollisionDetection(ennemy) {
+    const ennemyBounding = ennemy.element.getBoundingClientRect();
+    const attack = document.querySelector(".attack-ice");
+    if (!attack) {
+      return;
+    }
+    const attackBounding = attack.getBoundingClientRect();
+    const isInX =
+      ennemyBounding.left < attackBounding.right &&
+      ennemyBounding.right > attackBounding.left;
+    const isInY =
+      ennemyBounding.bottom > attackBounding.top &&
+      ennemyBounding.top < attackBounding.bottom;
+    if (isInX && isInY) {
+      console.log("is something happening ?");
+      return true;
+    }
+  }
+
   onAttackIceCollision(ennemy) {
     if (ennemy.canReceiveDamage) {
       this.mainCharacter.updateMana(5);
@@ -935,7 +1243,8 @@ class Game {
 
   checkIfWin() {
     let arrayOfEnnemies = document.querySelectorAll(".ennemy");
-    if (arrayOfEnnemies.length === 0) {
+    let arrayOfMobs = document.querySelectorAll(".mob");
+    if (arrayOfEnnemies.length === 0 && arrayOfMobs.length === 0) {
       this.winGame();
     }
   }
@@ -965,6 +1274,9 @@ class Game {
     for (const ennemy of this.ennemies) {
       ennemy.element.remove();
     }
+    for (const mob of this.mobs) {
+      mob.element.remove();
+    }
 
     function restartGame() {
       location.reload();
@@ -990,6 +1302,9 @@ class Game {
     this.mainCharacter.element.remove();
     for (const ennemy of this.ennemies) {
       ennemy.element.remove();
+    }
+    for (const mob of this.mobs) {
+      mob.element.remove();
     }
 
     function restartGame() {
