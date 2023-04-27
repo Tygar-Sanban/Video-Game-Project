@@ -2,7 +2,7 @@
 const gameArea = document.querySelector("main");
 const gameAreaBounding = gameArea.getBoundingClientRect();
 const startGameButton = document.getElementById("start-game");
-const speed = 1.3;
+const speed = 5.3;
 const pressedKeys = {
   left: false,
   right: false,
@@ -14,7 +14,10 @@ const pressedKeys = {
   p: false,
   n: false,
 };
-let canMove = true;
+let canMoveLeft = true;
+let canMoveRight = true;
+let canMoveUp = true;
+let canMoveDown = true;
 let canAttack = true;
 let lastPressedKey;
 let game = null;
@@ -24,6 +27,107 @@ let game = null;
 startGameButton.addEventListener("click", startGame);
 window.addEventListener("keydown", handlePressedKeys);
 window.addEventListener("keyup", handleReleasedKeys);
+const body = document.querySelector("body");
+
+const bat1 = document.createElement("div");
+bat1.classList = "building bat-1";
+gameArea.append(bat1);
+
+const bat2 = document.createElement("div");
+bat2.classList = "building bat-2";
+gameArea.append(bat2);
+
+const bat3 = document.createElement("div");
+bat3.classList = "building bat-3";
+gameArea.append(bat3);
+
+const bat4 = document.createElement("div");
+bat4.classList = "building bat-4";
+gameArea.append(bat4);
+
+const bat5 = document.createElement("div");
+bat5.classList = "building bat-5";
+gameArea.append(bat5);
+
+const bat6 = document.createElement("div");
+bat6.classList = "building bat-6";
+gameArea.append(bat6);
+
+const bat7 = document.createElement("div");
+bat7.classList = "building bat-7";
+gameArea.append(bat7);
+
+const bat8 = document.createElement("div");
+bat8.classList = "building bat-8";
+gameArea.append(bat8);
+
+const bat9 = document.createElement("div");
+bat9.classList = "building bat-9";
+gameArea.append(bat9);
+
+const bat10 = document.createElement("div");
+bat10.classList = "building bat-10";
+gameArea.append(bat10);
+
+const bat11 = document.createElement("div");
+bat11.classList = "building bat-11";
+gameArea.append(bat11);
+
+const bat12 = document.createElement("div");
+bat12.classList = "building bat-12";
+gameArea.append(bat12);
+
+const bat13 = document.createElement("div");
+bat13.classList = "building bat-13";
+gameArea.append(bat13);
+
+const parcTop = document.createElement("div");
+parcTop.classList = "building parc-top";
+gameArea.append(parcTop);
+
+const parcLeft = document.createElement("div");
+parcLeft.classList = "building parc-left";
+gameArea.append(parcLeft);
+
+const parcRight = document.createElement("div");
+parcRight.classList = "building parc-right";
+gameArea.append(parcRight);
+
+const parcBottomLeft = document.createElement("div");
+parcBottomLeft.classList = "building parc-bottom-left";
+gameArea.append(parcBottomLeft);
+
+const parcBottomRight = document.createElement("div");
+parcBottomRight.classList = "building parc-bottom-right";
+gameArea.append(parcBottomRight);
+
+const topMap = document.createElement("div");
+topMap.classList = "building top-map";
+gameArea.append(topMap);
+
+const leftMap = document.createElement("div");
+leftMap.classList = "building left-map";
+gameArea.append(leftMap);
+
+const rightMap = document.createElement("div");
+rightMap.classList = "building right-map";
+gameArea.append(rightMap);
+
+const bottomMap = document.createElement("div");
+bottomMap.classList = "building bottom-map";
+gameArea.append(bottomMap);
+
+// let redNpc = document.createElement("div");
+// redNpc.classList = "npc red";
+// gameArea.append(redNpc);
+
+// let blueNpc = document.createElement("div");
+// blueNpc.classList = "npc blue";
+// gameArea.append(blueNpc);
+
+// let purpleNpc = document.createElement("div");
+// purpleNpc.classList = "npc purple";
+// gameArea.append(purpleNpc);
 
 function startGame() {
   new Game();
@@ -174,8 +278,8 @@ class MainCharacter extends Character {
       this.hearts = this.createHeart();
     }
     this.mana = this.createMana();
-    this.x = gameArea.clientWidth / 2 - this.element.clientWidth / 2;
-    this.y = gameArea.clientHeight / 2 - this.element.clientHeight / 2;
+    this.x = 200;
+    this.y = 350;
     this.mainCharacterBounding = this.element.getBoundingClientRect();
     this.setPosition();
   }
@@ -204,7 +308,6 @@ class MainCharacter extends Character {
   createMana() {
     let mana = document.createElement("div");
     mana.classList = "mana";
-    let manaH1 = document.createElement("h1");
     mana.innerText = `MANA : ${this.manaCount}`;
     this.stats.append(mana);
     return mana;
@@ -275,22 +378,22 @@ class MainCharacter extends Character {
   animateMoving(direction) {
     switch (direction) {
       case "right":
-        if (canMove) {
+        if (canMoveRight) {
           this.element.classList = "character main-character right-side-walk";
         }
         break;
       case "left":
-        if (canMove) {
+        if (canMoveLeft) {
           this.element.classList = "character main-character left-side-walk";
         }
         break;
       case "up":
-        if (canMove) {
+        if (canMoveUp) {
           this.element.classList = "character main-character up-walk";
         }
         break;
       case "down":
-        if (canMove) {
+        if (canMoveDown) {
           this.element.classList = "character main-character down-walk";
         }
         break;
@@ -300,22 +403,22 @@ class MainCharacter extends Character {
   animateIdle(direction) {
     switch (direction) {
       case "right":
-        if (canMove) {
+        if (canMoveRight) {
           this.element.classList = "character main-character right-side-idle";
         }
         break;
       case "left":
-        if (canMove) {
+        if (canMoveLeft) {
           this.element.classList = "character main-character left-side-idle";
         }
         break;
       case "up":
-        if (canMove) {
+        if (canMoveUp) {
           this.element.classList = "character main-character up-idle";
         }
         break;
       case "down":
-        if (canMove) {
+        if (canMoveDown) {
           this.element.classList = "character main-character down-idle";
         }
         break;
@@ -324,7 +427,10 @@ class MainCharacter extends Character {
 
   attackFire() {
     if (canAttack && this.manaCount >= 18) {
-      canMove = false;
+      canMoveLeft = false;
+      canMoveRight = false;
+      canMoveUp = false;
+      canMoveDown = false;
       canAttack = false;
       const divAttack = document.createElement("div");
       divAttack.classList = "attack";
@@ -366,7 +472,10 @@ class MainCharacter extends Character {
       }, 50);
 
       setTimeout(() => {
-        canMove = true;
+        canMoveLeft = true;
+        canMoveRight = true;
+        canMoveUp = true;
+        canMoveDown = true;
         canAttack = true;
       }, 900);
 
@@ -379,7 +488,10 @@ class MainCharacter extends Character {
 
   attackLightning() {
     if (canAttack && this.manaCount >= 40) {
-      canMove = false;
+      canMoveLeft = false;
+      canMoveRight = false;
+      canMoveUp = false;
+      canMoveDown = false;
       canAttack = false;
       const divAttack = document.createElement("div");
       divAttack.classList = "attack-lightning";
@@ -421,7 +533,10 @@ class MainCharacter extends Character {
       }, 50);
 
       setTimeout(() => {
-        canMove = true;
+        canMoveLeft = true;
+        canMoveRight = true;
+        canMoveUp = true;
+        canMoveDown = true;
         canAttack = true;
       }, 2100);
 
@@ -434,7 +549,10 @@ class MainCharacter extends Character {
 
   attackIce() {
     if (canAttack) {
-      canMove = false;
+      canMoveLeft = false;
+      canMoveRight = false;
+      canMoveUp = false;
+      canMoveDown = false;
       canAttack = false;
       const divAttack = document.createElement("div");
       divAttack.classList = "attack-ice";
@@ -475,7 +593,10 @@ class MainCharacter extends Character {
       }, 50);
 
       setTimeout(() => {
-        canMove = true;
+        canMoveLeft = true;
+        canMoveRight = true;
+        canMoveUp = true;
+        canMoveDown = true;
         canAttack = true;
       }, 250);
 
@@ -647,6 +768,40 @@ class Mob extends Character {
     }, 85);
   }
 
+  canMobMove(direction) {
+    const buildings = document.querySelectorAll(".building");
+    for (const build of buildings) {
+      const buildingBounding = build.getBoundingClientRect();
+      const mobBounding = this.element.getBoundingClientRect();
+      const isInX =
+        mobBounding.right - 20 > buildingBounding.left &&
+        mobBounding.left + 20 < buildingBounding.right;
+      const isInY =
+        mobBounding.bottom - 18 > buildingBounding.top &&
+        mobBounding.top + 50 < buildingBounding.bottom;
+      if (isInX && isInY) {
+        switch (direction) {
+          case "up":
+            this.y += 20;
+            break;
+          case "right":
+            this.x -= 20;
+            break;
+          case "left":
+            this.x += 20;
+            break;
+          case "down":
+            this.y -= 20;
+            break;
+        }
+        this.setPosition();
+        return false;
+      }
+
+      return true;
+    }
+  }
+
   move() {
     const mainCharacter = document.querySelector(".main-character");
     if (
@@ -673,28 +828,32 @@ class Mob extends Character {
 
     if (
       this.element.getBoundingClientRect().right >
-      mainCharacter.getBoundingClientRect().right + 5
+        mainCharacter.getBoundingClientRect().right + 5 &&
+      this.canMobMove("left")
     ) {
       this.direction.x = -1;
       this.animateMoving("left");
     }
     if (
       this.element.getBoundingClientRect().left <
-      mainCharacter.getBoundingClientRect().left - 5
+        mainCharacter.getBoundingClientRect().left - 5 &&
+      this.canMobMove("right")
     ) {
       this.direction.x = 1;
       this.animateMoving("right");
     }
     if (
       this.element.getBoundingClientRect().top <
-      mainCharacter.getBoundingClientRect().top - 5
+        mainCharacter.getBoundingClientRect().top - 5 &&
+      this.canMobMove("down")
     ) {
       this.direction.y = 1;
       this.animateMoving("down");
     }
     if (
       this.element.getBoundingClientRect().bottom >
-      mainCharacter.getBoundingClientRect().bottom + 5
+        mainCharacter.getBoundingClientRect().bottom + 5 &&
+      this.canMobMove("up")
     ) {
       this.direction.y = -1;
       this.animateMoving("up");
@@ -744,38 +903,43 @@ class Mob extends Character {
   }
 }
 
-//Let's create the buildings collision
-class Buildings {
-  constructor(width, height, left, top, character) {
+//Now, we'll put in some NPCs that'll be responsible for the powers of my character
+class Npc {
+  constructor(color) {
+    this.color = color;
     this.element = this.createElement();
-    this.element.style.width = width;
-    this.element.style.height = height;
-    this.element.style.left = left;
-    this.element.style.top = top;
-    this.character = character;
+    // this.handleColor();
   }
 
   createElement() {
-    let div = document.createElement("div");
-    div.classList = "buildings";
-    gameArea.append(div);
-    return div;
+    const npc = document.createElement("div");
+    npc.className = this.color;
+    gameArea.append(npc);
+    return npc;
   }
 
-  collisionDetection() {
-    const buildingBounding = this.element.getBoundingClientRect();
-    const characterBounding = this.character.getBoundingClientRect();
-    const isInX =
-      buildingBounding.left < characterBounding.right - 80 &&
-      buildingBounding.right > characterBounding.left + 80;
-    const isInY =
-      buildingBounding.bottom > characterBounding.top + 60 &&
-      buildingBounding.top < characterBounding.bottom - 60;
-    if (isInX && isInY) {
-      return true;
-    } else {
-      return;
-    }
+  // handleColor() {
+  //   if (this.color === "red") {
+  //     this.element.classList = "red";
+  //   }
+  //   if (this.element.color === "blue") {
+  //     this.element.classList = "blue";
+  //   }
+  //   if (this.element.color === "purple") {
+  //     this.element.classList = "purple";
+  //   }
+  // }
+
+  animateImage() {
+    setInterval(() => {
+      let sprite = this.element;
+      let currentPositionX = window.getComputedStyle(
+        this.element
+      ).backgroundPositionX;
+      let x = parseInt(currentPositionX);
+      x -= 64;
+      sprite.style.backgroundPositionX = x + "px";
+    }, 50);
   }
 }
 
@@ -798,32 +962,19 @@ class Game {
       // new Ennemy(1, 1),
     ];
     this.mobs = [
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
-      new Mob(5, 1),
+      // new Mob(5, 0),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
+      // new Mob(5, 1),
     ];
-    // this.buildings = [
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    //   new Buildings(),
-    // ];
+    this.npcs = [new Npc("blue"), new Npc("red"), new Npc("purple")];
     this.animate();
     this.mainCharacter.animateImage();
     for (const ennemy of this.ennemies) {
@@ -832,6 +983,10 @@ class Game {
     for (const mob of this.mobs) {
       mob.animateImage();
     }
+    for (const npc of this.npcs) {
+      npc.animateImage();
+    }
+
     // setInterval(() => {
     //   this.pause();
     //   // this.resume();
@@ -842,10 +997,16 @@ class Game {
 
   moveBackground(direction) {
     let main = document.querySelector("main");
-    let currentPositionX = window.getComputedStyle(main).backgroundPositionX;
-    let x = parseInt(currentPositionX);
-    let currentPositionY = window.getComputedStyle(main).backgroundPositionY;
-    let y = parseInt(currentPositionY);
+    let x = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        "--x-position"
+      )
+    );
+    let y = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        "--y-position"
+      )
+    );
     switch (direction) {
       case "left":
         if (pressedKeys.n) {
@@ -853,7 +1014,7 @@ class Game {
         } else {
           x += speed;
         }
-        main.style.backgroundPositionX = x + "px";
+        document.documentElement.style.setProperty("--x-position", x + "px");
         for (const ennemy of this.ennemies) {
           ennemy.canDealDamage = false;
           setTimeout(() => {
@@ -873,7 +1034,7 @@ class Game {
         } else {
           x -= speed;
         }
-        main.style.backgroundPositionX = x + "px";
+        document.documentElement.style.setProperty("--x-position", x + "px");
         for (const ennemy of this.ennemies) {
           ennemy.canDealDamage = false;
           setTimeout(() => {
@@ -893,7 +1054,7 @@ class Game {
         } else {
           y += speed;
         }
-        main.style.backgroundPositionY = y + "px";
+        document.documentElement.style.setProperty("--y-position", y + "px");
         for (const ennemy of this.ennemies) {
           ennemy.canDealDamage = false;
           setTimeout(() => {
@@ -913,7 +1074,7 @@ class Game {
         } else {
           y -= speed;
         }
-        main.style.backgroundPositionY = y + "px";
+        document.documentElement.style.setProperty("--y-position", y + "px");
         for (const ennemy of this.ennemies) {
           ennemy.canDealDamage = false;
           setTimeout(() => {
@@ -930,14 +1091,47 @@ class Game {
     }
   }
 
+  canMove(direction) {
+    const buildings = document.querySelectorAll(".building");
+    for (const build of buildings) {
+      const buildingBounding = build.getBoundingClientRect();
+      const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+      const isInX =
+        mainBounding.right - 20 > buildingBounding.left &&
+        mainBounding.left + 20 < buildingBounding.right;
+      const isInY =
+        mainBounding.bottom - 18 > buildingBounding.top &&
+        mainBounding.top + 50 < buildingBounding.bottom;
+      if (isInX && isInY) {
+        switch (direction) {
+          case "up":
+            this.mainCharacter.y += 15;
+            break;
+          case "right":
+            this.mainCharacter.x -= 15;
+            break;
+          case "left":
+            this.mainCharacter.x += 15;
+            break;
+          case "down":
+            this.mainCharacter.y -= 15;
+            break;
+        }
+        this.mainCharacter.setPosition();
+        return false;
+      }
+    }
+    return true;
+  }
+
   //The game interval
 
   animate() {
     this.intervalId = setInterval(() => {
       const characterRect = this.mainCharacter.element.getBoundingClientRect();
-      this.checkIfWin();
+      // this.checkIfWin();
       this.checkIfEndGame();
-      if (pressedKeys.right && canMove) {
+      if (pressedKeys.right && this.canMove("right")) {
         if (characterRect.right >= 1600) {
           this.mainCharacter.animateMoving("right");
           this.moveBackground("right");
@@ -946,7 +1140,7 @@ class Game {
           this.mainCharacter.animateMoving("right");
         }
       }
-      if (pressedKeys.left && canMove) {
+      if (pressedKeys.left && this.canMove("left")) {
         if (characterRect.left <= 300) {
           this.mainCharacter.animateMoving("left");
           this.moveBackground("left");
@@ -955,7 +1149,7 @@ class Game {
           this.mainCharacter.animateMoving("left");
         }
       }
-      if (pressedKeys.up && canMove) {
+      if (pressedKeys.up && this.canMove("up")) {
         if (characterRect.top <= 200) {
           this.mainCharacter.animateMoving("up");
           this.moveBackground("up");
@@ -964,7 +1158,7 @@ class Game {
           this.mainCharacter.animateMoving("up");
         }
       }
-      if (pressedKeys.down && canMove) {
+      if (pressedKeys.down && this.canMove("down")) {
         if (characterRect.bottom >= 800) {
           this.mainCharacter.animateMoving("down");
           this.moveBackground("down");
@@ -1037,6 +1231,9 @@ class Game {
           this.onAttackIceCollision(ennemy);
         }
       }
+      // if (this.buildingCollisionsDetection()) {
+      //   this.onBuildingCollision();
+      // }
     }, 1000 / 60);
   }
 
@@ -1221,7 +1418,6 @@ class Game {
       ennemyBounding.bottom > attackBounding.top &&
       ennemyBounding.top < attackBounding.bottom;
     if (isInX && isInY) {
-      console.log("is something happening ?");
       return true;
     }
   }

@@ -8,7 +8,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+:root {
+  --x-position: 0px;
+  --y-position: 0px;
+}
 body {
   height: 100%;
   background-image: url("../Images/Tiles/New-map-try-map.png");
@@ -16,10 +19,10 @@ body {
 
 main {
   background-image: url("../Images/Tiles/New-map-try-map-zoom.png");
-  background-position: center;
+  background-position: bottom left;
   background-repeat: no-repeat;
-  background-position-x: 0px;
-  background-position-y: 0px;
+  background-position-x: var(--x-position);
+  background-position-y: var(--y-position);
   width: 1920px;
   height: 975px;
   overflow: auto;
@@ -85,11 +88,7 @@ main {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-image: url("../Images/lifeBarBackground.jpg");
-  background-position: center;
-  background-size: cover;
-  background-blend-mode: darken;
-  border-radius: 50%;
+  border-radius: 100vh;
 }
 
 .heart {
@@ -101,7 +100,7 @@ main {
 .mana {
   width: 128px;
   height: 32px;
-  color: black;
+  color: gold;
   font-family: "Comics";
   font-size: large;
   display: flex;
@@ -121,6 +120,195 @@ main {
   position: absolute;
   width: 64px;
   height: 64px;
+}
+
+.bat-1 {
+  width: 320px;
+  height: 352px;
+  position: absolute;
+  z-index: 100;
+  top: calc(32px + var(--y-position));
+  left: calc(64px + var(--x-position));
+}
+
+.bat-2 {
+  width: 768px;
+  height: 416px;
+  position: absolute;
+  z-index: 100;
+  top: calc(0px + var(--y-position));
+  left: calc(768px + var(--x-position));
+}
+
+.bat-3 {
+  width: 352px;
+  height: 352px;
+  position: absolute;
+  z-index: 100;
+  top: calc(32px + var(--y-position));
+  left: calc(1920px + var(--x-position));
+}
+
+.bat-4 {
+  width: 448px;
+  height: 352px;
+  position: absolute;
+  z-index: 100;
+  top: calc(32px + var(--y-position));
+  left: calc(2400px + var(--x-position));
+}
+
+.bat-5 {
+  width: 768px;
+  height: 608px;
+  position: absolute;
+  z-index: 100;
+  top: calc(864px + var(--y-position));
+  left: calc(64px + var(--x-position));
+}
+
+.parc-top {
+  width: 928px;
+  height: 32px;
+  position: absolute;
+  z-index: 100;
+  top: calc(928px + var(--y-position));
+  left: calc(960px + var(--x-position));
+}
+
+.parc-left {
+  width: 32px;
+  height: 416px;
+  position: absolute;
+  z-index: 100;
+  top: calc(928px + var(--y-position));
+  left: calc(960px + var(--x-position));
+}
+
+.parc-right {
+  width: 32px;
+  height: 416px;
+  position: absolute;
+  z-index: 100;
+  top: calc(928px + var(--y-position));
+  left: calc(1888px + var(--x-position));
+}
+
+.parc-bottom-left {
+  width: 416px;
+  height: 32px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1344px + var(--y-position));
+  left: calc(960px + var(--x-position));
+}
+
+.parc-bottom-right {
+  width: 416px;
+  height: 32px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1344px + var(--y-position));
+  left: calc(1504px + var(--x-position));
+}
+
+.bat-7 {
+  width: 416px;
+  height: 608px;
+  position: absolute;
+  z-index: 100;
+  top: calc(864px + var(--y-position));
+  left: calc(2432px + var(--x-position));
+}
+
+.bat-8 {
+  width: 1120px;
+  height: 192px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1312px + var(--y-position));
+  left: calc(3328px + var(--x-position));
+}
+
+.bat-9 {
+  width: 512px;
+  height: 512px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1920px + var(--y-position));
+  left: calc(64px + var(--x-position));
+}
+
+.bat-10 {
+  width: 832px;
+  height: 512px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1920px + var(--y-position));
+  left: calc(1088px + var(--x-position));
+}
+
+.bat-11 {
+  width: 480px;
+  height: 512px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1920px + var(--y-position));
+  left: calc(2432px + var(--x-position));
+}
+
+.bat-12 {
+  width: 704px;
+  height: 512px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1920px + var(--y-position));
+  left: calc(3040px + var(--x-position));
+}
+
+.bat-13 {
+  width: 192px;
+  height: 512px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1920px + var(--y-position));
+  left: calc(3872px + var(--x-position));
+}
+
+.top-map {
+  width: 4464px;
+  height: 16px;
+  position: absolute;
+  z-index: 100;
+  top: calc(0px + var(--y-position));
+  left: calc(0px + var(--x-position));
+}
+
+.left-map {
+  width: 16px;
+  height: 2544px;
+  position: absolute;
+  z-index: 100;
+  top: calc(0px + var(--y-position));
+  left: calc(0px + var(--x-position));
+}
+
+.right-map {
+  width: 16px;
+  height: 2544px;
+  position: absolute;
+  z-index: 100;
+  top: calc(0px + var(--y-position));
+  left: calc(4464px + var(--x-position));
+}
+
+.bottom-map {
+  width: 4464px;
+  height: 16px;
+  position: absolute;
+  z-index: 100;
+  top: calc(2544px + var(--y-position));
+  left: calc(0px + var(--x-position));
 }
 
 .main-character.down-idle {
@@ -276,6 +464,43 @@ main {
 
 .mob.dying {
   background-image: url("../Images/bad-guys/TopDown_RockBoss_EBrosAssets/TopDown_RockBoss_EBrosAssets/stomp/spritesheet-9.png");
+}
+
+.blue {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 100;
+  top: calc(350px + var(--y-position));
+  left: calc(300px + var(--x-position));
+  background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-blue.png");
+}
+.red {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 100;
+  top: calc(2430px + var(--y-position));
+  left: calc(300px + var(--x-position));
+  background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-red.png");
+}
+.purple {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  z-index: 100;
+  top: calc(1120px + var(--y-position));
+  left: calc(1760px + var(--x-position));
+  background-image: url("../Images/static-npc/mage_guardian_free_creativekind/mage_guardian-magenta.png");
+}
+
+.bottom-map {
+  width: 4464px;
+  height: 16px;
+  position: absolute;
+  z-index: 100;
+  top: calc(2544px + var(--y-position));
+  left: calc(0px + var(--x-position));
 }
 
 #end-game {
