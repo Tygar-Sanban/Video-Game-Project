@@ -21,6 +21,14 @@ let canMoveDown = true;
 let canAttack = true;
 let lastPressedKey;
 let game = null;
+let canOpenBlueChat = true;
+let canOpenRedChat = true;
+let canOpenPurpleChat = true;
+let spawnOneCanSpawn = true;
+let spawnTwoCanSpawn = true;
+let spawnThreeCanSpawn = true;
+let spawnFourCanSpawn = true;
+let spawnFiveCanSpawn = true;
 
 //Let's now implement the "physics"
 
@@ -117,9 +125,9 @@ const bottomMap = document.createElement("div");
 bottomMap.classList = "building bottom-map";
 gameArea.append(bottomMap);
 
-const spawnZone1 = document.createElement("div");
-spawnZone1.classList = "spawn1";
-gameArea.append(spawnZone1);
+const spawnZoneOne = document.createElement("div");
+spawnZoneOne.classList = "spawn-one";
+gameArea.append(spawnZoneOne);
 
 const spawnZone2 = document.createElement("div");
 spawnZone2.classList = "spawn2";
@@ -132,6 +140,10 @@ gameArea.append(spawnZone3);
 const spawnZone4 = document.createElement("div");
 spawnZone4.classList = "spawn4";
 gameArea.append(spawnZone4);
+
+const spawnZone5 = document.createElement("div");
+spawnZone5.classList = "spawn5";
+gameArea.append(spawnZone5);
 
 const blueZone = document.createElement("div");
 blueZone.classList = "blue-zone";
@@ -266,6 +278,9 @@ class MainCharacter extends Character {
     this.y = 350;
     this.mainCharacterBounding = this.element.getBoundingClientRect();
     this.setPosition();
+    this.canIce = false;
+    this.canFire = false;
+    this.canLightning = false;
   }
 
   createCharacter() {
@@ -410,7 +425,7 @@ class MainCharacter extends Character {
   }
 
   attackFire() {
-    if (canAttack && this.manaCount >= 18) {
+    if (canAttack && this.manaCount >= 18 && this.canFire) {
       canMoveLeft = false;
       canMoveRight = false;
       canMoveUp = false;
@@ -471,7 +486,7 @@ class MainCharacter extends Character {
   }
 
   attackLightning() {
-    if (canAttack && this.manaCount >= 40) {
+    if (canAttack && this.manaCount >= 40 && this.canLightning) {
       canMoveLeft = false;
       canMoveRight = false;
       canMoveUp = false;
@@ -532,7 +547,7 @@ class MainCharacter extends Character {
   }
 
   attackIce() {
-    if (canAttack) {
+    if (canAttack && this.canIce) {
       canMoveLeft = false;
       canMoveRight = false;
       canMoveUp = false;
@@ -789,30 +804,30 @@ class Mob extends Character {
   move() {
     const mainCharacter = document.querySelector(".main-character");
     if (
-      mainCharacter.getBoundingClientRect().top - 5 <
+      mainCharacter.getBoundingClientRect().top - 20 <
         this.element.getBoundingClientRect().top <
-        mainCharacter.getBoundingClientRect().top + 5 ||
-      mainCharacter.getBoundingClientRect().bottom - 5 <
+        mainCharacter.getBoundingClientRect().top + 20 ||
+      mainCharacter.getBoundingClientRect().bottom - 20 <
         this.element.getBoundingClientRect().bottom <
-        mainCharacter.getBoundingClientRect().bottom + 5
+        mainCharacter.getBoundingClientRect().bottom + 20
     ) {
       this.direction.y = 0;
     }
 
     if (
-      mainCharacter.getBoundingClientRect().left - 5 <
+      mainCharacter.getBoundingClientRect().left - 20 <
         this.element.getBoundingClientRect().left <
-        mainCharacter.getBoundingClientRect().left + 5 ||
-      mainCharacter.getBoundingClientRect().right - 5 <
+        mainCharacter.getBoundingClientRect().left + 20 ||
+      mainCharacter.getBoundingClientRect().right - 20 <
         this.element.getBoundingClientRect().right <
-        mainCharacter.getBoundingClientRect().right + 5
+        mainCharacter.getBoundingClientRect().right + 20
     ) {
       this.direction.x = 0;
     }
 
     if (
       this.element.getBoundingClientRect().right >
-        mainCharacter.getBoundingClientRect().right + 5 &&
+        mainCharacter.getBoundingClientRect().right + 20 &&
       this.canMobMove("left")
     ) {
       this.direction.x = -1;
@@ -820,7 +835,7 @@ class Mob extends Character {
     }
     if (
       this.element.getBoundingClientRect().left <
-        mainCharacter.getBoundingClientRect().left - 5 &&
+        mainCharacter.getBoundingClientRect().left - 20 &&
       this.canMobMove("right")
     ) {
       this.direction.x = 1;
@@ -828,7 +843,7 @@ class Mob extends Character {
     }
     if (
       this.element.getBoundingClientRect().top <
-        mainCharacter.getBoundingClientRect().top - 5 &&
+        mainCharacter.getBoundingClientRect().top - 20 &&
       this.canMobMove("down")
     ) {
       this.direction.y = 1;
@@ -836,7 +851,7 @@ class Mob extends Character {
     }
     if (
       this.element.getBoundingClientRect().bottom >
-        mainCharacter.getBoundingClientRect().bottom + 5 &&
+        mainCharacter.getBoundingClientRect().bottom + 20 &&
       this.canMobMove("up")
     ) {
       this.direction.y = -1;
@@ -930,7 +945,7 @@ class Cultist extends Mob {
       let x = parseInt(currentPositionX);
       x -= 220;
       sprite.style.backgroundPositionX = x + "px";
-    }, 85);
+    }, 100);
   }
 }
 
@@ -964,48 +979,26 @@ class Npc {
 //Let's launch the game !!
 class Game {
   constructor() {
-    this.mainCharacter = new MainCharacter("Philippe", 15, 3);
+    this.mainCharacter = new MainCharacter("Philippe", 1500, 3);
     this.intervalId = null;
-    this.ennemies = [
-      // new Ennemy(150, 2),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-      // new Ennemy(1, 1),
-    ];
-    this.mobs = [
-      // new Mob(5, 0),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-      // new Mob(5, 1),
-    ];
-    this.cultist = new Cultist(50, 3);
+    this.ennemies = [];
+    this.mobs = [];
+    this.cultists = [];
     this.npcs = [new Npc("blue"), new Npc("red"), new Npc("purple")];
     this.animate();
     this.mainCharacter.animateImage();
+    for (const npc of this.npcs) {
+      npc.animateImage();
+    }
+    for (const cultist of this.cultists) {
+      cultist.animateImage();
+    }
     for (const ennemy of this.ennemies) {
       ennemy.animateImage();
     }
     for (const mob of this.mobs) {
       mob.animateImage();
     }
-    for (const npc of this.npcs) {
-      npc.animateImage();
-    }
-    this.cultist.animateImage();
 
     // setInterval(() => {
     //   this.pause();
@@ -1016,7 +1009,6 @@ class Game {
   //Let's establish the scrolling system
 
   moveBackground(direction) {
-    let main = document.querySelector("main");
     let x = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
         "--x-position"
@@ -1165,7 +1157,7 @@ class Game {
   animate() {
     this.intervalId = setInterval(() => {
       const characterRect = this.mainCharacter.element.getBoundingClientRect();
-      // this.checkIfWin();
+      this.checkIfWin();
       this.checkIfEndGame();
       if (pressedKeys.right && this.canMove("right")) {
         if (characterRect.right >= 1600) {
@@ -1246,7 +1238,7 @@ class Game {
       }
 
       for (const ennemy of this.mobs) {
-        if (ennemy.canDealDamage && this.isOnAttackDistance(ennemy)) {
+        if (ennemy.canDealDamage) {
           ennemy.move();
         }
 
@@ -1268,33 +1260,63 @@ class Game {
         }
       }
 
-      if (this.cultist.canDealDamage && this.isOnAttackDistance(this.cultist)) {
-        this.cultist.move();
-      }
-      if (this.cultistCollisionDetection(this.cultist)) {
-        if (this.cultist.canDealDamage) {
-          this.onCollision(this.cultist);
-        } else {
-          return;
+      for (const cultist of this.cultists) {
+        if (cultist.canDealDamage) {
+          cultist.move();
+        }
+        if (this.cultistCollisionDetection(cultist)) {
+          if (cultist.canDealDamage) {
+            this.onCollision(cultist);
+          } else {
+            return;
+          }
+        }
+        if (this.attackFireMobCollisionDetection(cultist)) {
+          this.onAttackFireCollision(cultist);
+        }
+        if (this.attackLightningMobCollisionDetection(cultist)) {
+          this.onAttackLightningCollision(cultist);
+        }
+        if (this.attackIceMobCollisionDetection(cultist)) {
+          this.onAttackIceCollision(cultist);
         }
       }
-      if (this.attackFireMobCollisionDetection(this.cultist)) {
-        this.onAttackFireCollision(this.cultist);
+
+      if (
+        this.collisionDetectionRedZone() &&
+        canOpenRedChat &&
+        this.mainCharacter.canIce
+      ) {
+        this.onRedCollision();
       }
-      if (this.attackLightningMobCollisionDetection(this.cultist)) {
-        this.onAttackLightningCollision(this.cultist);
+      if (this.collisionDetectionBlueZone() && canOpenBlueChat) {
+        this.onBlueCollision();
       }
-      if (this.attackIceMobCollisionDetection(this.cultist)) {
-        this.onAttackIceCollision(this.cultist);
+      if (
+        this.collisionDetectionPurpleZone() &&
+        canOpenPurpleChat &&
+        this.mainCharacter.canFire
+      ) {
+        this.onPurpleCollision();
       }
-      if (this.collisionDetectionRedZone()) {
-        console.log("colliding yo !");
+      if (this.collisionDetectionSpawnZoneOne() && spawnOneCanSpawn) {
+        this.onCollisionSpawnZoneOne();
       }
-      if (this.collisionDetectionBlueZone()) {
-        console.log("colliding uesh !");
+      if (this.collisionDetectionSpawnZone2() && spawnTwoCanSpawn) {
+        this.onCollisionSpawnZone2();
       }
-      if (this.collisionDetectionPurpleZone()) {
-        console.log("colliding bi-atch!");
+      if (this.collisionDetectionSpawnZone3() && spawnThreeCanSpawn) {
+        this.onCollisionSpawnZone3();
+      }
+      if (this.collisionDetectionSpawnZone4() && spawnFourCanSpawn) {
+        this.onCollisionSpawnZone4();
+      }
+      if (
+        this.collisionDetectionSpawnZone5() &&
+        spawnFiveCanSpawn &&
+        this.mainCharacter.canLightning
+      ) {
+        this.onCollisionSpawnZone5();
       }
     }, 1000 / 60);
   }
@@ -1475,7 +1497,7 @@ class Game {
     if (ennemy.canReceiveDamage) {
       ennemy.canReceiveDamage = false;
       ennemy.canDealDamage = false;
-      ennemy.receiveDamage(this.mainCharacter.strength * 20);
+      ennemy.receiveDamage(this.mainCharacter.strength + 40);
       setTimeout(() => {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
@@ -1579,12 +1601,254 @@ class Game {
     }
   }
 
+  onBlueCollision() {
+    canOpenBlueChat = false;
+    let chatScreen = document.createElement("div");
+    chatScreen.classList = "blue-chat-screen";
+    let npcPicture = document.createElement("div");
+    npcPicture.classList = "blue-mage";
+    chatScreen.append(npcPicture);
+    let blueChatH1 = document.createElement("h1");
+    blueChatH1.textContent =
+      "Heeeeelp! Dark entities have invaded the town. Everyone has left or worst, they're dead ! It appears that you're the only one alive ! Were you sleeping or something ? Anyway, we need your help to eradicate the evil that struck this city! Take my power. You'll be able to do ICE DAMAGE by pressing I. Ice damage also allows you to gain some MANA which will be helpfull when you gain the powers of my brothers. Go south from here, you'll find my first brother. You'll definitly need his powers to make it to the end !";
+    chatScreen.append(blueChatH1);
+    let advance = document.createElement("button");
+    advance.classList = "advance";
+    advance.textContent = "Continue";
+    chatScreen.append(advance);
+    let main = document.querySelector("main");
+    main.append(chatScreen);
+    let advanceButton = document.querySelector(".advance");
+    advanceButton.addEventListener("click", closeChatScreen);
+
+    function closeChatScreen() {
+      chatScreen.remove();
+    }
+
+    this.mainCharacter.canIce = true;
+  }
+
+  onRedCollision() {
+    canOpenRedChat = false;
+    let chatScreen = document.createElement("div");
+    chatScreen.classList = "red-chat-screen";
+    let npcPicture = document.createElement("div");
+    npcPicture.classList = "red-mage";
+    chatScreen.append(npcPicture);
+    let redChatH1 = document.createElement("h1");
+    redChatH1.textContent =
+      "I've been expecting you,! I see with your use of Ice power that you have met my brother north-west of town. I guess he got you up to speed. We need you. Our magic is useless to harm others unless we transfer it to mortals. Here, take my power. You'll be able to do FIRE DAMAGE on your ennemies by pressing O. Be aware that it'll cost you MANA. But not as much as the power our sister is going to give you. She's north east of here in central park. Go! We're all counting on you !";
+    chatScreen.append(redChatH1);
+    let advance = document.createElement("button");
+    advance.classList = "advance2";
+    advance.textContent = "Continue";
+    chatScreen.append(advance);
+    let main = document.querySelector("main");
+    main.append(chatScreen);
+    let advanceButton = document.querySelector(".advance2");
+    advanceButton.addEventListener("click", closeChatScreen);
+
+    function closeChatScreen() {
+      chatScreen.remove();
+    }
+
+    this.mainCharacter.canFire = true;
+  }
+
+  onPurpleCollision() {
+    canOpenPurpleChat = false;
+    let chatScreen = document.createElement("div");
+    chatScreen.classList = "purple-chat-screen";
+    let npcPicture = document.createElement("div");
+    npcPicture.classList = "purple-mage";
+    chatScreen.append(npcPicture);
+    let purpleChatH1 = document.createElement("h1");
+    purpleChatH1.textContent =
+      "Here, take some lightning. No need to make a fuss. Use it with P, you'll need it to defeat the Cultist guardian who holds the key to defeat the leader of the dark army. The leader is north east of here and the Cultist Guardian is right behind you ...";
+    chatScreen.append(purpleChatH1);
+    let advance = document.createElement("button");
+    advance.classList = "advance3";
+    advance.textContent = "Continue";
+    chatScreen.append(advance);
+    let main = document.querySelector("main");
+    main.append(chatScreen);
+    let advanceButton = document.querySelector(".advance3");
+    advanceButton.addEventListener("click", closeChatScreen);
+    this.mainCharacter.canLightning = true;
+
+    function closeChatScreen() {
+      chatScreen.remove();
+    }
+    setTimeout(() => {
+      let underBoss = new Cultist(50, 3);
+      underBoss.id = "underboss";
+      this.cultists.push(underBoss);
+      this.cultists.forEach((cultist) => {
+        cultist.animateImage();
+      });
+    }, 7000);
+  }
+
+  collisionDetectionSpawnZoneOne() {
+    const spawn = document.querySelector(".spawn-one");
+    const spawnBounding = spawn.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      spawnBounding.left < mainBounding.right &&
+      spawnBounding.right > mainBounding.left;
+    const isInY =
+      spawnBounding.bottom > mainBounding.top &&
+      spawnBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionSpawnZone2() {
+    const spawn = document.querySelector(".spawn2");
+    const spawnBounding = spawn.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      spawnBounding.left < mainBounding.right &&
+      spawnBounding.right > mainBounding.left;
+    const isInY =
+      spawnBounding.bottom > mainBounding.top &&
+      spawnBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionSpawnZone3() {
+    const spawn = document.querySelector(".spawn3");
+    const spawnBounding = spawn.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      spawnBounding.left < mainBounding.right &&
+      spawnBounding.right > mainBounding.left;
+    const isInY =
+      spawnBounding.bottom > mainBounding.top &&
+      spawnBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionSpawnZone4() {
+    const spawn = document.querySelector(".spawn4");
+    const spawnBounding = spawn.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      spawnBounding.left < mainBounding.right &&
+      spawnBounding.right > mainBounding.left;
+    const isInY =
+      spawnBounding.bottom > mainBounding.top &&
+      spawnBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  collisionDetectionSpawnZone5() {
+    const spawn = document.querySelector(".spawn5");
+    const spawnBounding = spawn.getBoundingClientRect();
+    const mainBounding = this.mainCharacter.element.getBoundingClientRect();
+    const isInX =
+      spawnBounding.left < mainBounding.right &&
+      spawnBounding.right > mainBounding.left;
+    const isInY =
+      spawnBounding.bottom > mainBounding.top &&
+      spawnBounding.top < mainBounding.bottom;
+    if (isInX && isInY) {
+      return true;
+    }
+  }
+
+  onCollisionSpawnZoneOne() {
+    spawnOneCanSpawn = false;
+    let newMob1 = new Mob(5, 1);
+    let newMob2 = new Mob(5, 1);
+    this.mobs.push(newMob1);
+    this.mobs.push(newMob2);
+    this.mobs.forEach((mob) => {
+      mob.canDealDamage = true;
+      mob.animateImage();
+    });
+  }
+
+  onCollisionSpawnZone2() {
+    spawnTwoCanSpawn = false;
+    let newMob1 = new Mob(5, 1);
+    let newMob2 = new Mob(5, 1);
+    let newMob3 = new Mob(5, 1);
+    let newMob4 = new Mob(5, 1);
+
+    this.mobs.push(newMob1);
+    this.mobs.push(newMob2);
+    this.mobs.push(newMob3);
+    this.mobs.push(newMob4);
+
+    this.mobs.forEach((mob) => {
+      mob.canDealDamage = true;
+      mob.animateImage();
+    });
+  }
+
+  onCollisionSpawnZone3() {
+    spawnThreeCanSpawn = false;
+    let newMob1 = new Mob(5, 1);
+    let newMob2 = new Mob(5, 1);
+    let newMob3 = new Mob(5, 1);
+    let newMob4 = new Mob(5, 1);
+    this.mobs.push(newMob1);
+    this.mobs.push(newMob2);
+    this.mobs.push(newMob3);
+    this.mobs.push(newMob4);
+    this.mobs.forEach((mob) => {
+      mob.canDealDamage = true;
+      mob.animateImage();
+    });
+  }
+
+  onCollisionSpawnZone4() {
+    spawnFourCanSpawn = false;
+    let newMob1 = new Mob(5, 1);
+    let newMob2 = new Mob(5, 1);
+    let newMob3 = new Mob(5, 1);
+    let newMob4 = new Mob(5, 1);
+    let newMob5 = new Mob(5, 1);
+    let newMob6 = new Mob(5, 1);
+    this.mobs.push(newMob1);
+    this.mobs.push(newMob2);
+    this.mobs.push(newMob3);
+    this.mobs.push(newMob4);
+    this.mobs.push(newMob5);
+    this.mobs.push(newMob6);
+    this.mobs.forEach((mob) => {
+      mob.canDealDamage = true;
+      mob.animateImage();
+    });
+  }
+
+  onCollisionSpawnZone5() {
+    spawnFiveCanSpawn = false;
+    let boss = new Ennemy(150, 3);
+    this.ennemies.push(boss);
+    this.ennemies.forEach((boss) => {
+      boss.canDealDamage = true;
+      boss.animateImage();
+    });
+  }
+
   //The function for the end of the game.
 
   checkIfWin() {
     let arrayOfEnnemies = document.querySelectorAll(".ennemy");
-    let arrayOfMobs = document.querySelectorAll(".mob");
-    if (arrayOfEnnemies.length === 0 && arrayOfMobs.length === 0) {
+    if (
+      this.mainCharacter.canLightning &&
+      !spawnFiveCanSpawn &&
+      arrayOfEnnemies.length === 0
+    ) {
       this.winGame();
     }
   }
@@ -1600,7 +1864,8 @@ class Game {
     let winScreen = document.createElement("div");
     winScreen.id = "win-game";
     let winH1 = document.createElement("h1");
-    winH1.textContent = "You win ! Let me suck your dick !";
+    winH1.textContent =
+      "You successfully saved the whole town and maybe the world. Time to go back to that purple mage to see what's up !";
     winScreen.append(winH1);
     let goAgain = document.createElement("button");
     goAgain.id = "go-again";
