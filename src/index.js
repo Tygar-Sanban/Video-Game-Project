@@ -612,8 +612,8 @@ class Ennemy extends Character {
   constructor(health, strength) {
     super(health, strength);
     this.element = this.createCharacter();
-    this.x = gameArea.clientWidth * Math.random();
-    this.y = gameArea.clientHeight * Math.random();
+    this.x = gameArea.clientWidth / 2 + 200;
+    this.y = gameArea.clientHeight / 2 - 200;
     this.direction = { x: 1, y: 1 };
     this.setPosition();
     this.canDealDamage = true;
