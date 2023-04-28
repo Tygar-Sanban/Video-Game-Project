@@ -357,66 +357,66 @@ main {
 }
 
 .main-character.down-idle {
-  background-image: url("./../Images/main-char/_down-idle.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_down-idle.png");
   background-position: 0px 0px;
 }
 
 .main-character.down-walk {
-  background-image: url("../Images/main-char/_down-walk.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_down-walk.png");
   background-position: 0px 0px;
 }
 
 .main-character.left-side-idle {
-  background-image: url("../Images/main-char/_side-idle.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-idle.png");
   background-position: 0px 0px;
 }
 
 .main-character.left-side-walk {
-  background-image: url("../Images/main-char/_side-walk.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-walk.png");
   background-position: 0px 0px;
 }
 
 .main-character.right-side-idle {
-  background-image: url("../Images/main-char/_side-idle.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-idle.png");
   background-position: 0px 0px;
   transform: scaleX(-1);
 }
 
 .main-character.right-side-walk {
-  background-image: url("../Images/main-char/_side-walk.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-walk.png");
   background-position: 0px 0px;
   transform: scaleX(-1);
 }
 
 .main-character.up-idle {
-  background-image: url("../Images/main-char/_up-idle.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_up-idle.png");
   background-position: 0px 0px;
 }
 
 .main-character.up-walk {
-  background-image: url("../Images/main-char/_up-walk.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_up-walk.png");
   background-position: 0px 0px;
 }
 
 .main-character.attack-down {
-  background-image: url("../Images/main-char/_down-attack.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_down-attack.png");
 }
 
 .main-character.attack-left {
-  background-image: url("../Images/main-char/_side-attack.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-attack.png");
 }
 
 .main-character.attack-right {
-  background-image: url("../Images/main-char/_side-attack.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_side-attack.png");
   transform: scaleX(-1);
 }
 
 .main-character.attack-up {
-  background-image: url("../Images/main-char/_up-attack.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_up-attack.png");
 }
 
 .main-character.dying {
-  background-image: url("../Images/main-char/_pick-up.png");
+  background-image: url("https://raw.githubusercontent.com/Tygar-Sanban/Video-Game-Project/main/Images/main-char/_pick-up.png");
 }
 
 .ennemy.down-idle {
