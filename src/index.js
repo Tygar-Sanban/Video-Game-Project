@@ -1028,20 +1028,20 @@ class Game {
         }
         document.documentElement.style.setProperty("--x-position", x + "px");
         for (const ennemy of this.ennemies) {
-          ennemy.canDealDamage = false;
+          ennemy?.canDealDamage = false;
           setTimeout(() => {
-            ennemy.canDealDamage = true;
+            ennemy?.canDealDamage = true;
           }, 1000);
         }
         for (const mob of this.mobs) {
-          mob.canDealDamage = false;
+          mob?.canDealDamage = false;
           setTimeout(() => {
-            mob.canDealDamage = true;
+            mob?.canDealDamage = true;
           }, 1000);
         }
-        this.cultist.canDealDamage = false;
+        this.cultist?.canDealDamage = false;
         setTimeout(() => {
-          this.cultist.canDealDamage = true;
+          this.cultist?.canDealDamage = true;
         }, 1000);
         break;
       case "right":
