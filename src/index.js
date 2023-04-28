@@ -460,6 +460,14 @@ class MainCharacter extends Character {
       divAttack.style.top = y + "px";
       main.append(divAttack);
       this.updateMana(-18);
+      const fireAudio = new Audio(
+        "../Sounds/00_-_legit_audio_-_legit_fir_fire_staff_20-audio.mp3"
+      );
+      fireAudio.play();
+      const fireAudio2 = new Audio("../Sounds/04_Fire_explosion_04_medium.wav");
+      fireAudio2.play();
+      const fireAudio3 = new Audio("../Sounds/fire-1.wav");
+      fireAudio3.play();
 
       setInterval(() => {
         let sprite = divAttack;
@@ -521,7 +529,12 @@ class MainCharacter extends Character {
       divAttack.style.top = y + "px";
       main.append(divAttack);
       this.updateMana(-40);
-
+      const lightningSound1 = new Audio("../Sounds/18_Thunder_02.wav");
+      lightningSound1.play();
+      const lightningSound2 = new Audio("../Sounds/22_Water_02.wav");
+      lightningSound2.play();
+      const lightningSound3 = new Audio("../Sounds/25_Wind_01.wav");
+      lightningSound3.play();
       setInterval(() => {
         let sprite = divAttack;
         let currentPositionX =
@@ -581,6 +594,10 @@ class MainCharacter extends Character {
       divAttack.style.left = x + "px";
       divAttack.style.top = y + "px";
       main.append(divAttack);
+      const iceAudio = new Audio("../Sounds/ice.wav");
+      iceAudio.play();
+      const iceAudio2 = new Audio("../Sounds/coldsnap.wav");
+      iceAudio2.play();
 
       setInterval(() => {
         let sprite = divAttack;
@@ -618,6 +635,7 @@ class Ennemy extends Character {
     this.setPosition();
     this.canDealDamage = true;
     this.canReceiveDamage = true;
+    this.canScream = true;
   }
 
   createCharacter() {
@@ -746,6 +764,7 @@ class Mob extends Character {
     this.setPosition();
     this.canDealDamage = true;
     this.canReceiveDamage = true;
+    this.canScream = true;
   }
 
   createCharacter() {
@@ -979,6 +998,8 @@ class Npc {
 //Let's launch the game !!
 class Game {
   constructor() {
+    const music = new Audio("../Sounds/INSPIRATION1.mp3");
+    music.loop = true;
     this.mainCharacter = new MainCharacter("Philippe", 20, 3);
     this.intervalId = null;
     this.ennemies = [];
@@ -1411,6 +1432,8 @@ class Game {
       ennemy.animateEnnemyAttack();
       this.mainCharacter.receiveDamage(ennemy.strength);
       ennemy.canDealDamage = false;
+      const hit = new Audio("../Sounds/Hits/hit34.mp3.flac");
+      hit.play();
       setTimeout(() => {
         ennemy.canDealDamage = true;
       }, 3500);
@@ -1483,6 +1506,14 @@ class Game {
       let index = this.cultists.indexOf(ennemy);
       this.cultists.splice(index, 1);
     }
+    if (ennemy.canScream) {
+      ennemy.canScream = false;
+      const hit = new Audio("../Sounds/Hits/hit34.mp3.flac");
+      hit.play();
+      setTimeout(() => {
+        ennemy.canScream = true;
+      }, 2500);
+    }
   }
 
   attackLightningCollisionDetection(ennemy) {
@@ -1546,6 +1577,14 @@ class Game {
       ennemy.killCharacter();
       let index = this.cultists.indexOf(ennemy);
       this.cultists.splice(index, 1);
+    }
+    if (ennemy.canScream) {
+      ennemy.canScream = false;
+      const hit = new Audio("../Sounds/Hits/hit34.mp3.flac");
+      hit.play();
+      setTimeout(() => {
+        ennemy.canScream = true;
+      }, 2500);
     }
   }
 
@@ -1612,6 +1651,14 @@ class Game {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
       }, 1500);
+    }
+    if (ennemy.canScream) {
+      ennemy.canScream = false;
+      const hit = new Audio("../Sounds/Hits/hit34.mp3.flac");
+      hit.play();
+      setTimeout(() => {
+        ennemy.canScream = true;
+      }, 2500);
     }
   }
 
