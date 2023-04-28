@@ -612,8 +612,8 @@ class Ennemy extends Character {
   constructor(health, strength) {
     super(health, strength);
     this.element = this.createCharacter();
-    this.x = gameArea.clientWidth / 2 + 200;
-    this.y = gameArea.clientHeight / 2 - 200;
+    this.x = gameArea.clientWidth / 2;
+    this.y = gameArea.clientHeight / 2;
     this.direction = { x: 1, y: 1 };
     this.setPosition();
     this.canDealDamage = true;
@@ -740,8 +740,8 @@ class Mob extends Character {
   constructor(health, strength) {
     super(health, strength);
     this.element = this.createCharacter();
-    this.x = gameArea.clientWidth * Math.random();
-    this.y = gameArea.clientHeight * Math.random();
+    this.x = gameArea.clientWidth / 2 + Math.floor(Math.random() * 500);
+    this.y = gameArea.clientHeight / 2 + Math.floor(Math.random() * 500);
     this.direction = { x: 1, y: 1 };
     this.setPosition();
     this.canDealDamage = true;
@@ -979,7 +979,7 @@ class Npc {
 //Let's launch the game !!
 class Game {
   constructor() {
-    this.mainCharacter = new MainCharacter("Philippe", 1500, 3);
+    this.mainCharacter = new MainCharacter("Philippe", 20, 3);
     this.intervalId = null;
     this.ennemies = [];
     this.mobs = [];
@@ -1008,114 +1008,126 @@ class Game {
 
   //Let's establish the scrolling system
 
+  checkIfEnnemies() {
+    if (
+      this.ennemies.length === 0 &&
+      this.mobs.length === 0 &&
+      this.cultists.length === 0
+    ) {
+      return true;
+    }
+  }
+
   moveBackground(direction) {
-    let x = parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--x-position"
-      )
-    );
-    let y = parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--y-position"
-      )
-    );
-    switch (direction) {
-      case "left":
-        if (pressedKeys.n) {
-          x += speed * 1.7;
-        } else {
-          x += speed;
-        }
-        document.documentElement.style.setProperty("--x-position", x + "px");
-        for (const ennemy of this.ennemies) {
-          ennemy.canDealDamage = false;
+    if (this.checkIfEnnemies()) {
+      let x = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--x-position"
+        )
+      );
+      let y = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--y-position"
+        )
+      );
+      switch (direction) {
+        case "left":
+          if (pressedKeys.n) {
+            x += speed * 1.7;
+          } else {
+            x += speed;
+          }
+          document.documentElement.style.setProperty("--x-position", x + "px");
+          for (const ennemy of this.ennemies) {
+            ennemy.canDealDamage = false;
+            setTimeout(() => {
+              ennemy.canDealDamage = true;
+            }, 2500);
+          }
+          for (const mob of this.mobs) {
+            mob.canDealDamage = false;
+            setTimeout(() => {
+              mob.canDealDamage = true;
+            }, 2500);
+          }
+          this.cultist.canDealDamage = false;
           setTimeout(() => {
-            ennemy.canDealDamage = true;
-          }, 1000);
-        }
-        for (const mob of this.mobs) {
-          mob.canDealDamage = false;
+            this.cultist.canDealDamage = true;
+          }, 2500);
+          break;
+        case "right":
+          if (pressedKeys.n) {
+            x -= speed * 1.7;
+          } else {
+            x -= speed;
+          }
+          document.documentElement.style.setProperty("--x-position", x + "px");
+          for (const ennemy of this.ennemies) {
+            ennemy.canDealDamage = false;
+            setTimeout(() => {
+              ennemy.canDealDamage = true;
+            }, 1000);
+          }
+          for (const mob of this.mobs) {
+            mob.canDealDamage = false;
+            setTimeout(() => {
+              mob.canDealDamage = true;
+            }, 1000);
+          }
+          this.cultist.canDealDamage = false;
           setTimeout(() => {
-            mob.canDealDamage = true;
-          }, 1000);
-        }
-        this.cultist.canDealDamage = false;
-        setTimeout(() => {
-          this.cultist.canDealDamage = true;
-        }, 1000);
-        break;
-      case "right":
-        if (pressedKeys.n) {
-          x -= speed * 1.7;
-        } else {
-          x -= speed;
-        }
-        document.documentElement.style.setProperty("--x-position", x + "px");
-        for (const ennemy of this.ennemies) {
-          ennemy.canDealDamage = false;
+            this.cultist.canDealDamage = true;
+          }, 2500);
+          break;
+        case "up":
+          if (pressedKeys.n) {
+            y += speed * 1.7;
+          } else {
+            y += speed;
+          }
+          document.documentElement.style.setProperty("--y-position", y + "px");
+          for (const ennemy of this.ennemies) {
+            ennemy.canDealDamage = false;
+            setTimeout(() => {
+              ennemy.canDealDamage = true;
+            }, 2500);
+          }
+          for (const mob of this.mobs) {
+            mob.canDealDamage = false;
+            setTimeout(() => {
+              mob.canDealDamage = true;
+            }, 2500);
+          }
+          this.cultist.canDealDamage = false;
           setTimeout(() => {
-            ennemy.canDealDamage = true;
-          }, 1000);
-        }
-        for (const mob of this.mobs) {
-          mob.canDealDamage = false;
+            this.cultist.canDealDamage = true;
+          }, 2500);
+          break;
+        case "down":
+          if (pressedKeys.n) {
+            y -= speed * 1.7;
+          } else {
+            y -= speed;
+          }
+          document.documentElement.style.setProperty("--y-position", y + "px");
+          for (const ennemy of this.ennemies) {
+            ennemy.canDealDamage = false;
+            setTimeout(() => {
+              ennemy.canDealDamage = true;
+            }, 2500);
+          }
+          for (const mob of this.mobs) {
+            mob.canDealDamage = false;
+            setTimeout(() => {
+              mob.canDealDamage = true;
+            }, 2500);
+          }
+          this.cultist.canDealDamage = false;
           setTimeout(() => {
-            mob.canDealDamage = true;
-          }, 1000);
-        }
-        this.cultist.canDealDamage = false;
-        setTimeout(() => {
-          this.cultist.canDealDamage = true;
-        }, 1000);
-        break;
-      case "up":
-        if (pressedKeys.n) {
-          y += speed * 1.7;
-        } else {
-          y += speed;
-        }
-        document.documentElement.style.setProperty("--y-position", y + "px");
-        for (const ennemy of this.ennemies) {
-          ennemy.canDealDamage = false;
-          setTimeout(() => {
-            ennemy.canDealDamage = true;
-          }, 1000);
-        }
-        for (const mob of this.mobs) {
-          mob.canDealDamage = false;
-          setTimeout(() => {
-            mob.canDealDamage = true;
-          }, 1000);
-        }
-        this.cultist.canDealDamage = false;
-        setTimeout(() => {
-          this.cultist.canDealDamage = true;
-        }, 1000);
-        break;
-      case "down":
-        if (pressedKeys.n) {
-          y -= speed * 1.7;
-        } else {
-          y -= speed;
-        }
-        document.documentElement.style.setProperty("--y-position", y + "px");
-        for (const ennemy of this.ennemies) {
-          ennemy.canDealDamage = false;
-          setTimeout(() => {
-            ennemy.canDealDamage = true;
-          }, 1000);
-        }
-        for (const mob of this.mobs) {
-          mob.canDealDamage = false;
-          setTimeout(() => {
-            mob.canDealDamage = true;
-          }, 1000);
-        }
-        this.cultist.canDealDamage = false;
-        setTimeout(() => {
-          this.cultist.canDealDamage = true;
-        }, 1000);
-        break;
+            this.cultist.canDealDamage = true;
+          }, 2500);
+          break;
+      }
     }
   }
 
@@ -1455,6 +1467,22 @@ class Game {
         ennemy.canReceiveDamage = true;
       }, 2500);
     }
+
+    if (ennemy instanceof Mob && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.mobs.indexOf(ennemy);
+      this.mobs.splice(index, 1);
+    }
+    if (ennemy instanceof Ennemy && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.ennemies.indexOf(ennemy);
+      this.ennemies.splice(index, 1);
+    }
+    if (ennemy instanceof Cultist && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.cultists.indexOf(ennemy);
+      this.cultists.splice(index, 1);
+    }
   }
 
   attackLightningCollisionDetection(ennemy) {
@@ -1503,6 +1531,22 @@ class Game {
         ennemy.canReceiveDamage = true;
       }, 4500);
     }
+
+    if (ennemy instanceof Mob && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.mobs.indexOf(ennemy);
+      this.mobs.splice(index, 1);
+    }
+    if (ennemy instanceof Ennemy && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.ennemies.indexOf(ennemy);
+      this.ennemies.splice(index, 1);
+    }
+    if (ennemy instanceof Cultist && ennemy.health <= 0) {
+      ennemy.killCharacter();
+      let index = this.cultists.indexOf(ennemy);
+      this.cultists.splice(index, 1);
+    }
   }
 
   attackIceCollisionDetection(ennemy) {
@@ -1547,6 +1591,23 @@ class Game {
       ennemy.canReceiveDamage = false;
       ennemy.canDealDamage = false;
       ennemy.receiveDamage(this.mainCharacter.strength);
+
+      if (ennemy instanceof Mob && ennemy.health <= 0) {
+        ennemy.killCharacter();
+        let index = this.mobs.indexOf(ennemy);
+        this.mobs.splice(index, 1);
+      }
+      if (ennemy instanceof Ennemy && ennemy.health <= 0) {
+        ennemy.killCharacter();
+        let index = this.ennemies.indexOf(ennemy);
+        this.ennemies.splice(index, 1);
+      }
+      if (ennemy instanceof Cultist && ennemy.health <= 0) {
+        ennemy.killCharacter();
+        let index = this.cultists.indexOf(ennemy);
+        this.cultists.splice(index, 1);
+      }
+
       setTimeout(() => {
         ennemy.canDealDamage = true;
         ennemy.canReceiveDamage = true;
@@ -1610,7 +1671,7 @@ class Game {
     chatScreen.append(npcPicture);
     let blueChatH1 = document.createElement("h1");
     blueChatH1.textContent =
-      "Heeeeelp! Dark entities have invaded the town. Everyone has left or worst, they're dead ! It appears that you're the only one alive ! Were you sleeping or something ? Anyway, we need your help to eradicate the evil that struck this city! Take my power. You'll be able to do ICE DAMAGE by pressing I. Ice damage also allows you to gain some MANA which will be helpfull when you gain the powers of my brothers. Go south from here, you'll find my first brother. You'll definitly need his powers to make it to the end !";
+      "Heeeeelp! Dark entities have invaded the town. Everyone has left or worst, they're dead ! It appears that you're the only one alive ! Were you sleeping or something ? Anyway, we need your help to eradicate the evil that struck this city! Take my power. You'll be able to do ICE DAMAGE by pressing I. Ice damage also allows you to gain some MANA which will be helpfull when you gain the powers of my siblings. Go south-west from here, you'll find my brother. You'll definitly need his powers to make it to the end !";
     chatScreen.append(blueChatH1);
     let advance = document.createElement("button");
     advance.classList = "advance";
@@ -1637,7 +1698,7 @@ class Game {
     chatScreen.append(npcPicture);
     let redChatH1 = document.createElement("h1");
     redChatH1.textContent =
-      "I've been expecting you,! I see with your use of Ice power that you have met my brother north-west of town. I guess he got you up to speed. We need you. Our magic is useless to harm others unless we transfer it to mortals. Here, take my power. You'll be able to do FIRE DAMAGE on your ennemies by pressing O. Be aware that it'll cost you MANA. But not as much as the power our sister is going to give you. She's north east of here in central park. Go! We're all counting on you !";
+      "I've been expecting you,! I see by your use of my brother's Ice power that you have met him north-west of town. I guess he got you up to speed. We need you. Our magic is useless to harm others unless we transfer it to mortals. Here, take my power. You'll be able to do FIRE DAMAGE on your ennemies by pressing O. Be aware that it'll cost you MANA. But not as much as the power our sister is going to give you. She's north east of here in central park. Go! We're all counting on you !";
     chatScreen.append(redChatH1);
     let advance = document.createElement("button");
     advance.classList = "advance2";
